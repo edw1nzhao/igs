@@ -55,6 +55,7 @@ export class CoreUtils {
     }
 
     curTimeIsLarger(curRow, priorRow) {
+        return true;
         return Number.parseFloat(curRow[this.headersMovement[0]]).toFixed(1) > Number.parseFloat(priorRow[this.headersMovement[0]]).toFixed(1);
     }
 

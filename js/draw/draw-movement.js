@@ -25,7 +25,7 @@ export class DrawMovement {
         this.sk.noFill(); // important for curveVertex drawing
         this.sk.noStroke(); // reset stroke, updated in later styling methods for stop/movement drawing
         this.style.shade = path.color.pathMode;
-        this.setDraw(this.sk.PLAN, path.movement);
+        //this.setDraw(this.sk.PLAN, path.movement);
         this.setDraw(this.sk.SPACETIME, path.movement);
         if (this.dot !== null) this.drawDot(this.dot);
     }

@@ -22,6 +22,7 @@ export class DrawUtils {
 
     isShowingInAnimation(value) {
         if (this.sk.sketchController.getIsAnimate()) return this.sk.sketchController.animationCounter > this.sk.sketchController.mapPixelTimeToTotalTime(value);
+        else if (this.sk.videoController.isLoadedAndIsPlaying()) return this.sk.sketchController.mapPixelTimeToTotalTime(value) < this.sk.videoController.getVideoPlayerCurTime();
         else return true;
     }
 
