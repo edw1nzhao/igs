@@ -67,7 +67,7 @@ export class ParseCodes {
      */
     getCodeData(curTime) {
         let hasCodeArray = [];
-        let color = this.sk.core.COLORGRAY; // if no matching codes are found, this will be the color returned
+        let color = '#e41a1c'; // if no matching codes are found, this will be the color returned
         for (let i = 0; i < this.parsedFileArray.length; i++) {
             const curCodeTableRow = this.parsedFileArray[i].parsedCodeArray[this.parsedFileArray[i].counter];
             if (this.coreUtils.codeRowForType(curCodeTableRow)) { // IMPORTANT: in case there is partial missing data etc. 
@@ -89,8 +89,14 @@ export class ParseCodes {
         }
     }
 
+    // red e41a1c
+    // blue 377eb8
+    // brown: a65628
+    // green: #4daf4a
+    //'#6a3d9a', '#ff7f00'
+
     getCodeColor(color, index) {
-        if (color === this.sk.core.COLORGRAY) return this.sk.core.getNextColorInList(index);
+        if (color === '#e41a1c') return '#377eb8';
         else return 0; // if color already assigned, make it black because there are multiple true codes for same curTime
     }
     timeIsBetweenCurRow(curTime, codeTable) {
