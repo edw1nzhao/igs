@@ -51,37 +51,32 @@ export class ParseCodes {
     createCodeTable(resultsDataArray, codeName) {
         return {
             parsedCodeArray: resultsDataArray,
-            codeName: codeName,
-            counter: 0
+            codeName: codeName
         }
     }
 
     /** 
      * Invoked when creating point arrays in parseMovement
      * Tests if the current time value is between any start/end code times in all loaded codeTables
-     * NOTE: comparing to next row in codeTable and use of codeTable counters tries to do this in a most efficient manner
      * Returns list of boolean vars indicating if value is within range for all loaded codes and
      * a single color variable, which can be gray if value is not within range for loaded codes or black if within multiple ranges
      * 
      * @param  {Number/Float} curTime
      */
     getCodeData(curTime) {
-        let hasCodeArray = [];
-        let color = this.sk.core.COLORGRAY; // if no matching codes are found, this will be the color returned
-        for (let i = 0; i < this.parsedFileArray.length; i++) {
-            const curCodeTableRow = this.parsedFileArray[i].parsedCodeArray[this.parsedFileArray[i].counter];
-            if (this.coreUtils.codeRowForType(curCodeTableRow)) { // IMPORTANT: in case there is partial missing data etc. 
-                if (this.timeIsBetweenCurRow(curTime, this.parsedFileArray[i])) {
+        const hasCodeArray = [];
+        let color = this.sk.core.COLORGRAY;
+        for (const curCodeTable of this.parsedFileArray) {
+            let hasCode = false;
+            for (const curRow of curCodeTable.parsedCodeArray) {
+                if (this.coreUtils.codeRowForType(curRow) && this.between(curTime, this.getStartTime(curRow), this.getEndTime(curRow))) {
+                    hasCode = true;
                     hasCodeArray.push(true);
-                    color = this.getCodeColor(color, i);
-                } else {
-                    if (this.parsedFileArray[i].counter < this.parsedFileArray[i].parsedCodeArray.length - 1 && this.timeIsBetweenNextRow(curTime, this.parsedFileArray[i])) {
-                        hasCodeArray.push(true);
-                        color = this.getCodeColor(color, i);
-                        this.parsedFileArray[i].counter++;
-                    } else hasCodeArray.push(false);
+                    color = this.getCodeColor(color, this.parsedFileArray.indexOf(curCodeTable));
+                    break;
                 }
             }
+            if (!hasCode) hasCodeArray.push(false);
         }
         return {
             hasCodeArray,
@@ -93,20 +88,13 @@ export class ParseCodes {
         if (color === this.sk.core.COLORGRAY) return this.sk.core.getNextColorInList(index);
         else return 0; // if color already assigned, make it black because there are multiple true codes for same curTime
     }
-    timeIsBetweenCurRow(curTime, codeTable) {
-        return this.between(curTime, this.getStartTime(codeTable.parsedCodeArray, codeTable.counter), this.getEndTime(codeTable.parsedCodeArray, codeTable.counter));
+
+    getStartTime(row) {
+        return row[this.coreUtils.headersSingleCodes[0]];
     }
 
-    timeIsBetweenNextRow(curTime, codeTable) {
-        return this.between(curTime, this.getStartTime(codeTable.parsedCodeArray, codeTable.counter + 1), this.getEndTime(codeTable.parsedCodeArray, codeTable.counter + 1));
-    }
-
-    getStartTime(results, row) {
-        return results[row][this.coreUtils.headersSingleCodes[0]];
-    }
-
-    getEndTime(results, row) {
-        return results[row][this.coreUtils.headersSingleCodes[1]];
+    getEndTime(row) {
+        return row[this.coreUtils.headersSingleCodes[1]];
     }
 
     between(x, min, max) {
@@ -116,11 +104,5 @@ export class ParseCodes {
     clear() {
         this.parsedFileArray = [];
         this.sk.core.clearCodes();
-    }
-
-    resetCounters() {
-        for (const codeTable of this.parsedFileArray) {
-            codeTable.counter = 0;
-        }
     }
 }

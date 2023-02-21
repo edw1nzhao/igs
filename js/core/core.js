@@ -53,7 +53,6 @@ export class Core {
         this.pathList.push(this.createPath(pathName, movementPointArray, conversationPointArray)); // update data list
         this.pathList = this.sortByName(this.pathList); // then sort
         this.setTotalTime(movementPointArray);
-        this.parseCodes.resetCounters(); // must reset code counters if multiple paths are loaded
         this.sk.domController.updateCheckboxes("movement");
         this.sk.loop();
     }
