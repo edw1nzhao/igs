@@ -70,7 +70,7 @@ export class Core {
     }
 
     updateCodes(codeName) {
-        this.codeList.push(this.createDisplayData(codeName, false, this.COLORGRAY, this.getNextColorInList(this.codeList.length)));
+        this.codeList.push(this.createDisplayData(codeName, true, this.COLORGRAY, this.getNextColorInList(this.codeList.length)));
         this.clearMovement();
         this.parseMovement.reProcessAllPointArrays();
         this.sk.domController.updateCheckboxes("codes");

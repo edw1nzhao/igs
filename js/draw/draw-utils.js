@@ -27,19 +27,18 @@ export class DrawUtils {
 
     /**
      * This method tests if a point is showing for all selected codes from codeList
-     * IMPLEMENTATION: Iterate through codeList and return false if: for any of codes that are true in codeList a code at curPoint is false 
+     * IMPLEMENTATION: Iterate through codeList, return false if no codes in curPoint are true / showing in the codeList
      * @param  {MovementPoint} point
      */
     isShowingInCodeList(codesArray) {
         if (this.sk.arrayIsLoaded(this.codeList)) {
             for (let j = 0; j < this.codeList.length; j++) {
                 if (this.codeList[j].isShowing) {
-                    if (codesArray[j]) continue;
-                    else return false;
+                    if (codesArray[j]) return true;
                 }
             }
-        }
-        return true;
+            return false;
+        } else return true;
     }
 
     /**
