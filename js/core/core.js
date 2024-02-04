@@ -82,6 +82,7 @@ export class Core {
     setTotalTime(movementPointArray) {
         const curPathEndTime = Math.floor(movementPointArray[movementPointArray.length - 1].time);
         if (this.totalTimeInSeconds < curPathEndTime) this.totalTimeInSeconds = curPathEndTime; // update global total time, make sure to floor value as integer
+        this.totalTimeInSeconds = 3354;
     }
 
     getTotalTimeInSeconds() {
@@ -115,8 +116,17 @@ export class Core {
         return {
             name, // string name
             isShowing, // toggle display in GUI
-            color: this.createColorDisplayObject(colorPathMode, colorCodeMode) // 
+            color: this.createColorDisplayObject(this.zzzTIMSSCOLOR(name), colorCodeMode) // 
         }
+    }
+
+    zzzTIMSSCOLOR(name) {
+        if (name.includes("teacher")) return this.COLOR_LIST[0];
+        else if (name.includes("new student")) return this.COLOR_LIST[1];
+        else if (name.includes("single student")) return this.COLOR_LIST[2];
+        else if (name.includes("two or more students")) return this.COLOR_LIST[3];
+        else if (name.includes("entire class")) return this.COLOR_LIST[4];
+        else return this.COLOR_LIST[5];
     }
 
     createColorDisplayObject(pathMode, codeMode) {

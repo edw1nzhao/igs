@@ -1,4 +1,12 @@
 /*
+SETTINGS USED TO SCALE DATA FOR TIMSS DATA:
+animate speed 5000
+stops 10
+time 56 minutes
+remove highlight
+*/
+
+/*
 Launches IGS as a p5 sketch in instance mode. p5 sketch, DOM and program data are coordinated as follows:
     1) Various sketch classes update canvas-based visualizations (SketchGUI, SketchController, Handle3D)
     2) Dom handler and Dom controller classes update DOM based GUI

@@ -54,7 +54,7 @@ export class Highlight {
         this.sk.strokeWeight(1);
         if (this.isHighlighting()) this.drawCurHighlight();
         this.sk.stroke(150);
-        for (const highlightRect of this.highlightArray) this.drawHighlightRects(highlightRect);
+        //for (const highlightRect of this.highlightArray) this.drawHighlightRects(highlightRect);
     }
 
     /**

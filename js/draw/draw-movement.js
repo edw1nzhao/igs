@@ -99,7 +99,8 @@ export class DrawMovement {
      */
     drawStopCircle(p) {
         this.setFillStyle(p.cur.point.codes.color);
-        const stopSize = this.sk.map(p.cur.point.stopLength, 0, this.sk.core.maxStopLength, 5, this.largestStopPixelSize);
+        const stopSize = this.sk.map(p.cur.point.stopLength, 0, 420, 5, this.largestStopPixelSize);
+        //const stopSize = this.sk.map(p.cur.point.stopLength, 0, this.sk.core.maxStopLength, 5, this.largestStopPixelSize);
         this.sk.circle(p.cur.pos.viewXPos, p.cur.pos.floorPlanYPos, stopSize);
         this.sk.noFill();
     }
