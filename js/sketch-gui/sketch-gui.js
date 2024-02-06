@@ -26,7 +26,7 @@ export class SketchGUI {
     update3D() {
         this.highlight.setDraw();
         if (this.sk.handle3D.getIs3DMode() && this.timelinePanel.overTimeline()) {
-            this.timelinePanel.draw3DSlicerRect(this.fpContainer.getContainer(), this.sk.sketchController.mapToSelectTimeThenPixelTime(this.sk.mouseX));
+            //this.timelinePanel.draw3DSlicerRect(this.fpContainer.getContainer(), this.sk.sketchController.mapToSelectTimeThenPixelTime(this.sk.mouseX));
         }
     }
 }
