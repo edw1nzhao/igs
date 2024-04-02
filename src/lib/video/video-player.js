@@ -125,7 +125,12 @@ export class P5FilePlayer {
             this.setMovieDiv();
             this.sk.videoController.videoPlayerReady();
         });
-    }
+        this.isDragging = false;
+        this.isResizing = false;
+        this.resizeHandle = null;
+        this.dragBar = null;
+      }
+
 
     setMovieDiv() {
         this.movie.id(this.targetId);
@@ -143,7 +148,94 @@ export class P5FilePlayer {
         this.movie.mouseOver(() => {
             this.sk.select(this.selectId).style('cursor', 'grab'); // set mouse cursor style--this overrides any P5 cursor styles set in draw loop
         });
-    }
+        this.movie.mousePressed(() => {
+            if (this.isOver) {
+              this.isDragging = true;
+            }
+          });
+          this.movie.mouseReleased(() => {
+            this.isDragging = false;
+            this.isResizing = false;
+          });
+          this.movie.mouseMoved(() => {
+            this.showResizeHandles();
+            this.showDragBar();
+          });
+        }
+
+        showResizeHandles() {
+            // Check if mouse is hovering over the video
+            if (this.isOver) {
+              // Show resize handles based on mouse position
+              const handleSize = 10;
+              const xPos = this.movie.position().x;
+              const yPos = this.movie.position().y;
+              const width = this.movie.width;
+              const height = this.movie.height;
+
+              // Calculate the positions of the resize handles
+              const leftHandleX = xPos;
+              const rightHandleX = xPos + width - handleSize;
+              const topHandleY = yPos;
+              const bottomHandleY = yPos + height - handleSize;
+
+              // Create or update the resize handles
+              if (!this.resizeHandles) {
+                this.resizeHandles = {
+                  left: this.sk.createDiv(),
+                  right: this.sk.createDiv(),
+                };
+              }
+
+              // Style and position the resize handles
+              this.resizeHandles.left.style('background-color', 'white');
+              this.resizeHandles.left.style('border-radius', '50%');
+              this.resizeHandles.left.style('width', `${handleSize}px`);
+              this.resizeHandles.left.style('height', `${handleSize}px`);
+              this.resizeHandles.left.position(leftHandleX, (topHandleY + bottomHandleY) / 2);
+
+              this.resizeHandles.right.style('background-color', 'white');
+              this.resizeHandles.right.style('border-radius', '50%');
+              this.resizeHandles.right.style('width', `${handleSize}px`);
+              this.resizeHandles.right.style('height', `${handleSize}px`);
+              this.resizeHandles.right.position(rightHandleX, (topHandleY + bottomHandleY) / 2);
+            } else {
+              // Hide resize handles
+              if (this.resizeHandles) {
+                this.resizeHandles.left.remove();
+                this.resizeHandles.right.remove();
+                this.resizeHandles = null;
+              }
+            }
+          }
+
+          showDragBar() {
+            // Check if mouse is hovering over the video
+            if (this.isOver) {
+              // Show drag bar
+              const barHeight = 5;
+              const xPos = this.movie.position().x;
+              const yPos = this.movie.position().y + this.movie.height;
+              const width = this.movie.width;
+
+              // Create or update the drag bar
+              if (!this.dragBar) {
+                this.dragBar = this.sk.createDiv();
+              }
+
+              // Style and position the drag bar
+              this.dragBar.style('background-color', 'white');
+              this.dragBar.style('height', `${barHeight}px`);
+              this.dragBar.style('width', `${width}px`);
+              this.dragBar.position(xPos, yPos);
+            } else {
+              // Hide drag bar
+              if (this.dragBar) {
+                this.dragBar.remove();
+                this.dragBar = null;
+              }
+            }
+          }
 
     show() {
         let element = document.querySelector(this.selectId);
@@ -184,9 +276,12 @@ export class P5FilePlayer {
     }
 
     updatePos(mouseX, mouseY, top, bottom) {
-        const xPos = this.sk.constrain(mouseX, this.videoWidth / 2, this.sk.width - this.videoWidth / 2);
-        const yPos = this.sk.constrain(mouseY, top + this.videoHeight / 2, bottom - this.videoHeight / 2);
-        if (this.isOver) this.sk.select(this.selectId).position(xPos - this.videoWidth / 2, yPos - this.videoHeight / 2);
+        if (this.isDragging) {
+
+            const xPos = this.sk.constrain(mouseX, this.videoWidth / 2, this.sk.width - this.videoWidth / 2);
+            const yPos = this.sk.constrain(mouseY, top + this.videoHeight / 2, bottom - this.videoHeight / 2);
+            if (this.isOver) this.sk.select(this.selectId).position(xPos - this.videoWidth / 2, yPos - this.videoHeight / 2);
+        }
     }
 
     increaseSize() {

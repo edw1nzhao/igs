@@ -44,6 +44,12 @@ export class VideoController {
 		this.sk.loop();
 	}
 
+	toggleVideoVisibility() {
+		if (this.isPlayerAndDivLoaded()) {
+			this.videoPlayer.toggleVisibility();
+		}
+	}
+
 	/**
 	 * Updates video image and position
 	 */
@@ -72,6 +78,7 @@ export class VideoController {
 			} else {
 				this.videoPlayer.show();
 				this.isShowing = true;
+				this.play(); // Start playing the video when shown
 			}
 		}
 	}
